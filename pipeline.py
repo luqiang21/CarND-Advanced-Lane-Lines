@@ -122,7 +122,7 @@ def pipeline(img, s_thresh=(170, 255), sx_thresh=(20, 100)):
 	img_size = (img.shape[1],img.shape[0])
 	warped = cv2.warpPerspective(combined_binary, M, img_size, flags=cv2.INTER_LINEAR)
 
-	return color_binary, warped
+	return color_binary, combined_binary, warped
 	
 
 # Next, read in a image and undistort it.
@@ -138,8 +138,9 @@ ax2.imshow(undistorted)
 ax2.set_title('Undistorted Image', fontsize=20)
 plt.subplots_adjust(left=0., right=1, top=0.9, bottom=0.)
 
-# Next, perform thresholding, output binary image
 
+
+# Next, perform thresholding, output binary image
 
 img = mpimg.imread('test_images/straight_lines1.jpg')
 # img = image
@@ -196,7 +197,12 @@ plt.subplots_adjust(left=0., right=1, top=0.9, bottom=0.)
 # plt.show()
 
 
-result = pipeline(img)[1]
+combined_binary, result = pipeline(img)[1:]
+
+# Plot the result
+plt.figure()
+plt.imshow(combined_binary, cmap='gray')
+plt.title('Binary Image', fontsize=20)
 
 # Plot the result
 f, (ax1, ax2) = plt.subplots(1, 2, figsize=(24, 9))
@@ -207,6 +213,8 @@ ax1.set_title('Original Image', fontsize=20)
 ax2.imshow(result, cmap='gray')
 ax2.set_title('Pipeline Result', fontsize=20)
 plt.subplots_adjust(left=0., right=1, top=0.9, bottom=0.)
+
+
 
 
 binary_warped = result
