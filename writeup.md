@@ -34,7 +34,10 @@ The goals / steps of this project are the following:
 
 ####1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  [Here](https://github.com/udacity/CarND-Advanced-Lane-Lines/blob/master/writeup_template.md) is a template writeup for this project you can use as a guide and a starting point.  
 
-You're reading it!
+I first imported necessary python packages. Then the calibration parameters (mtx, dst) were computed based on the calibration images provided by Udacity. An image now can be undistorted using the parameters. The image can also be unwarped by selecting four points that should be a rectangle in real world.
+
+A histogram of the bottom half of the unwarped image was taken to find the peaks which corresponding to lanes, thus it is easy to get the lane center and the vehicle center is simply the center of the image. I computed the lane curvatures for each lane. Then I draw lane area on the undistorted image.
+
 ###Camera Calibration
 
 ####1. Briefly state how you computed the camera matrix and distortion coefficients. Provide an example of a distortion corrected calibration image.
@@ -43,7 +46,7 @@ The code for this step is contained in the 5th cell of Advanced_Lane_Lines.ipynb
 
 I start by preparing "object points", which will be the (x, y, z) coordinates of the chessboard corners in the world. Here I am assuming the chessboard is fixed on the (x, y) plane at z=0, such that the object points are the same for each calibration image.  Thus, `objp` is just a replicated array of coordinates, and `objpoints` will be appended with a copy of it every time I successfully detect all chessboard corners in a test image.  `imgpoints` will be appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard detection.  
 
-I then used the output `objpoints` and `imgpoints` to compute the camera calibration and distortion coefficients using my function cal_undistort(img, objpoints, imgpoints) which includes the `cv2.calibrateCamera()` function.  I applied this distortion correction to the test image using the `cv2.undistort()` function and obtained this result: 
+I then used the output `objpoints` and `imgpoints` to compute the camera calibration and distortion coefficients using my function cal_undistort(img, objpoints, imgpoints) which includes the `cv2.calibrateCamera()` function.  I applied this distortion correction to the test image using the `cv2.undistort()` function and obtained this result:
 
 ![alt text][image1]
 
@@ -52,9 +55,9 @@ I then used the output `objpoints` and `imgpoints` to compute the camera calibra
 ####1. Provide an example of a distortion-corrected image.
 To demonstrate this step, I will describe how I apply the distortion correction to one of the test images like this one:
 ![alt text][image2]
-The parameters mtx and dist of distortion for the camera has been computed from last step. Thus I can just apply the camera parameters to other image like the above one. 
+The parameters mtx and dist of distortion for the camera has been computed from last step. Thus I can just apply the camera parameters to other image like the above one.
 ####2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
-I used a combination of color and gradient thresholds to generate a binary image (the 3rd cell in the notebook).  Here's an example of my output for this step. 
+I used a combination of color and gradient thresholds to generate a binary image (the 3rd cell in the notebook).  Here's an example of my output for this step.
 
 ![alt text][image3]
 
@@ -64,9 +67,9 @@ The code for my perspective transform includes a function called unwarp(img, mtx
 
 This resulted in the following source and destination points:
 
-| Source        | Destination   | 
-|:-------------:|:-------------:| 
-| 541, 490      | 404, 490       | 
+| Source        | Destination   |
+|:-------------:|:-------------:|
+| 541, 490      | 404, 490       |
 | 747, 490      | 899, 490      |
 | 254, 681     | 404, 681      |
 | 1049, 681      |899, 681       |
@@ -83,7 +86,7 @@ Then I did some other stuff and fit my lane lines with a 2nd order polynomial ki
 
 ####5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-I did this in cell 26 within the function process(img, Minv, left_fit, right_fit) and cell 9.
+I did this in cell 26 within the function process(img, Minv, left_fit, right_fit) and cell 9 in the notebook.
 
 ####6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
@@ -105,4 +108,6 @@ Here's a [link to my video result](./project_video.mp4)
 
 ####1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-The hardest part for me is the average over several images which I didn't make it. The weak part of my current implementation is the lane curvature computation. To make it robust, I need to know the implementation of class in python and then make the obtained lane lines stable.
+The hardest part for me is the average over several images which I didn't make it. The weak part of my current implementation is the lane curvature computation. To make it robust, I need to know the implementation of class in python and then make the obtained lane lines stable. Thus, by using class, vehicle's position and lane lines positions, lane polygons could be averaged to get more stable results. Also, different conditions of the road images like brightness, curvature and so on will include noise on the detection of the lanes. More thresholding on more color channels may bring robustness.
+
+To have a stable plotting of lane area, I tried the method from my reviewer to reject weird polygons. It seems improved the performance a bit. More work should be done on the extraction of lane lines with averaging.
