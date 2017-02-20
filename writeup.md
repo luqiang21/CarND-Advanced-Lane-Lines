@@ -24,6 +24,7 @@ The goals / steps of this project are the following:
 [image4]: ./output_images/warped_straight_lines.png "Warp Example"
 [image5]: ./output_images/color_fit_lines.png "Fit Visual"
 [image6]: ./output_images/example_output.png "Output"
+[image7]: ./output_images/final_lane_lines.PNG "final"
 [video1]: ./project_video.mp4 "Video"
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
@@ -63,13 +64,13 @@ I used a combination of color and gradient thresholds to generate a binary image
 
 ####3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
-The code for my perspective transform includes a function called unwarp(img, mtx, dist), which appears the 4th cell in the notebook).  The function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points. The source four points are selected on the image by the file 'pickPoints.py' which gives coordinates when you click within the image.
+The code for my perspective transform includes a function called unwarp(img, mtx, dist), which appears the 4th cell in the notebook).  The function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points. The source four points are selected on the image by the file 'pickPoints.py' which gives coordinates when you click within the image. After reviewer's suggestion, I tuned the source points a little bit and obtained parallel lanes finally.
 
 This resulted in the following source and destination points:
 
 | Source        | Destination   |
 |:-------------:|:-------------:|
-| 541, 490      | 404, 490       |
+| 536, 490      | 404, 490       |
 | 747, 490      | 899, 490      |
 | 254, 681     | 404, 681      |
 | 1049, 681      |899, 681       |
@@ -79,6 +80,9 @@ I verified that my perspective transform was working as expected by drawing the 
 ![alt text][image4]
 
 ####4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
+Below is the comparison between the original image and the image after undistortion, binary thresholding, and unwarping for final identification of lane-line pixels.
+
+![alt text][image7]
 
 Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this (cells 6 and 10 in the notebook):
 
